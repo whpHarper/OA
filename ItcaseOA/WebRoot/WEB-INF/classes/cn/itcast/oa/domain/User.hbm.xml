@@ -9,7 +9,23 @@
 		<id name="id">
             <generator class="native"/>
 		</id>
+		<property name="loginName" />
+		<property name="password" />
 		<property name="name" />
+		<property name="gender" />
+		<property name="phoneNumber" />
+		<property name="email" />
+		<property name="description" />
+		
+		<!-- department属性，与Department是多对一关系 -->
+		<many-to-one name="department" class="Department" column="departmentId"></many-to-one>
+		
+		<!-- roles属性，与Role的多对多关系 -->
+		<set name="roles" table="itcase_user_role">
+			<key column="userId"></key>
+			<many-to-many class="Role" column="roleId"/>
+		</set>
+		
 	</class>
 	
 </hibernate-mapping>

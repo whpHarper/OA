@@ -66,7 +66,7 @@ public class RoleAction extends ActionSupport implements ModelDriven<Role>{
 	}
 	
 	public String addUI(){
-		return "addUI";
+		return "saveUI";
 	}
 	
 	public String add(){
@@ -81,7 +81,7 @@ public class RoleAction extends ActionSupport implements ModelDriven<Role>{
 	public String editUI(){
 		Role role=roleService.getById(model.getId());
 		ActionContext.getContext().getValueStack().push(role);
-		return "editUI";
+		return "saveUI";
 	}
 	
 	public String edit(){
