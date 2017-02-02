@@ -11,4 +11,10 @@ public interface RoleService {
 
 	void deleteById(long id);
 
+	void add(Role role);
+
+	Role getById(long id);
+
+	void edit(Role role);
+
 }

@@ -28,4 +28,17 @@ public class RoleServiceImpl implements RoleService{
 		
 	}
 
+	public void add(Role role) {
+		roleDao.save(role);
+	}
+
+	public Role getById(long id) {
+		Role role=roleDao.getById(id);
+		return role;
+	}
+
+	public void edit(Role role) {
+		roleDao.update(role);
+	}
+
 }

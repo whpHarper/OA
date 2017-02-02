@@ -11,9 +11,12 @@
 			<s:property value="name"/>,
 			<s:property value="description"/>
 			<s:a action="role_delete?id=%{id}" onclick="return confirm('确定要删除吗？')">删除</s:a>
+			<s:a action="role_editUI?id=%{id}">修改</s:a>
+			
 			<br/>
 		</s:iterator>
-		
+		<br/>
+		<s:a action="role_addUI">添加</s:a>
 	
 	</body>
 </html>
