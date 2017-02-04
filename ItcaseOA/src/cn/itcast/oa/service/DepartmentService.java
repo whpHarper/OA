@@ -2,11 +2,12 @@ package cn.itcast.oa.service;
 
 import java.util.List;
 
+import cn.itcast.oa.base.DaoSupport;
 import cn.itcast.oa.domain.Department;
 
-public interface DepartmentService {
+public interface DepartmentService extends DaoSupport<Department> {
 
-	List<Department> findAll();
+	/*List<Department> findAll();
 	
 	void delete(long id);
 
@@ -15,6 +16,7 @@ public interface DepartmentService {
 	Department findById(long id);
 
 	void update(Department department);
+	*/
 
 	List<Department> findTopList();
 

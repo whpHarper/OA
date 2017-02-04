@@ -5,9 +5,7 @@
 <hibernate-configuration>
 <session-factory>
 	<!-- 1，数据库连接信息 -->
-	<property name="dialect">
-		org.hibernate.dialect.MySQL5InnoDBDialect
-	</property>
+	<property name="dialect">org.hibernate.dialect.DerbyDialect</property>
 	<!-- 
 		<property name="connection.url">jdbc:mysql:///itcastoa0720</property>
 		<property name="connection.driver_class">com.jdbc.mysql.Driver</property>
@@ -20,9 +18,22 @@
 	<property name="hbm2ddl.auto">update</property>
 
 	<!-- 3，导入映射文件 -->
+	<property name="myeclipse.connection.profile">
+		MyEclipse Derby
+	</property>
+	<property name="connection.url">
+		jdbc:derby://localhost:1527/myeclipse
+	</property>
+	<property name="connection.username">classiccars</property>
+	<property name="connection.password">myeclipse</property>
+	<property name="connection.driver_class">
+		org.apache.derby.jdbc.ClientDriver
+	</property>
 	<mapping resource="cn/itcast/oa/domain/User.hbm.xml" />
 	<mapping resource="cn/itcast/oa/domain/Role.hbm.xml" />
 	<mapping resource="cn/itcast/oa/domain/Department.hbm.xml" />
-
+	<!-- <mapping resource="cn/itcast/oa/domain/Privilege.hbm.xml" />
+	-->
+	<mapping resource="cn/itcast/oa/domain/Privilege.hbm.xml" />
 </session-factory>
 </hibernate-configuration>

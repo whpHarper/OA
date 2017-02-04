@@ -7,20 +7,20 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import cn.itcast.oa.base.BaseAction;
 import cn.itcast.oa.domain.Department;
 import cn.itcast.oa.service.DepartmentService;
+import cn.itcast.oa.util.departmentUtils;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
+@SuppressWarnings("serial")
 @Controller
 @Scope("prototype")
-public class DepartmentAction extends ActionSupport implements ModelDriven<Department> {
-	
-	@Resource
-	private DepartmentService departmentService;
-	
+public class DepartmentAction extends BaseAction<Department>{
+
 	private Long parentId;
 	public Long getParentId() {
 		return parentId;
@@ -30,21 +30,13 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 		this.parentId = parentId;
 	}
 
-	
-	
-	private Department model=new Department();
-	
-	public Department getModel() {
-		return model;
-	}
-	
 	public String list() throws Exception{
 		List<Department> departmentList=null;
 		if(parentId==null){
 			departmentList=departmentService.findTopList();
 		}else{
 			departmentList=departmentService.finChildrenList(parentId);
-			Department parent=departmentService.findById(parentId);
+			Department parent=departmentService.getById(parentId);
 			ActionContext.getContext().put("parent", parent);
 		}	
 				
@@ -58,14 +50,15 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 	}
 	
 	public String addUI() throws Exception{
-		List<Department> departmentList=departmentService.findAll();
+		List<Department> topList=departmentService.findTopList();
+		List<Department> departmentList=departmentUtils.getAllDepartments(topList);
 		ActionContext.getContext().put("departmentList", departmentList);
 		
 		return "saveUI";
 	}
 	
 	public String add() throws Exception{
-		Department parent=departmentService.findById(parentId);
+		Department parent=departmentService.getById(parentId);
 		model.setParent(parent);
 		
 		departmentService.save(model);
@@ -74,10 +67,12 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 	
 	public String editUI() throws Exception{
 		//准备数据
-		List<Department> departmentList=departmentService.findAll();
+		List<Department> topList=departmentService.findTopList();
+		List<Department> departmentList=departmentUtils.getAllDepartments(topList);
+		
 		ActionContext.getContext().put("departmentList", departmentList);
 		
-		Department department=departmentService.findById(model.getId());
+		Department department=departmentService.getById(model.getId());
 		ActionContext.getContext().getValueStack().push(department);
 		
 		if(department.getParent()!=null){
@@ -93,7 +88,7 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 		department.setId(model.getId());
 		department.setDescription(model.getDescription());
 		department.setName(model.getName());
-		department.setParent(departmentService.findById(parentId));
+		department.setParent(departmentService.getById(parentId));
 		
 		departmentService.update(department);
 		return "toList";

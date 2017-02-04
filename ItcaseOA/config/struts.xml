@@ -16,6 +16,24 @@
 
 	<package name="default" namespace="/" extends="struts-default">
 		
+		<interceptors>
+    		<!-- 声明拦截器 -->
+    		<interceptor name="checkPrivilege" class="cn.itcast.oa.util.CheckPrivilegeInterceptor"></interceptor>
+    		
+    		<!-- 重新定义默认的拦截器栈 -->
+    		<interceptor-stack name="defaultStack">
+    			<interceptor-ref name="checkPrivilege"></interceptor-ref>
+    			<interceptor-ref name="defaultStack"></interceptor-ref>
+    		</interceptor-stack>
+    	</interceptors>
+
+
+		<!-- 全局的Result配置 -->
+		<global-results>
+			<result name="loginUI">/WEB-INF/jsp/userAction/loginUI.jsp</result>
+			<result name="noPrivilegeError">/noPrivilegeError.jsp</result>
+		</global-results>
+		
 		<!-- 配置试用的action，未与spring整合，class率性写类全名 -->
 		<!-- 当struts2与spring整合后，class属性可以写bean的名称 -->
 		<action name="test" class="testAction">
@@ -24,17 +42,32 @@
 		
 		<action name="role_*" class="roleAction" method="{1}">
 			<result name="list">/WEB-INF/jsp/roleAction/list.jsp</result>
+			<result name="setPrivilegeUI">/WEB-INF/jsp/roleAction/setPrivilegeUI.jsp</result>
 			<result name="saveUI">/WEB-INF/jsp/roleAction/saveUI.jsp</result>
 			<!-- <result name="editUI">/WEB-INF/jsp/roleAction/edit.jsp</result> -->
 			<result name="toList" type="redirectAction">role_list</result>
 		</action>
-		
+		   
 		<action name="department_*" class="departmentAction" method="{1}">
 			<result name="list">/WEB-INF/jsp/departmentAction/list.jsp</result>
 			<result name="saveUI">/WEB-INF/jsp/departmentAction/saveUI.jsp</result>
 			<!-- <result name="editUI">/WEB-INF/jsp/departmentAction/edit.jsp</result> -->
 			<result name="toList" type="redirectAction">department_list?parentId=${parentId}</result>
 		</action>
+		
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/userAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/userAction/saveUI.jsp</result>
+			<result name="toList" type="redirectAction">user_list?parentId=${parentId}</result>
+			
+			<result name="loginout">/WEB-INF/jsp/userAction/logout.jsp</result>
+			<result name="toLogin" type="redirect">/index.jsp</result>
+		</action>
+		
+		<action name="home_*" class="homeAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/homeAction/{1}.jsp</result>
+		</action>
+		
 	</package>
 	
 </struts>

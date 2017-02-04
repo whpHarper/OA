@@ -7,15 +7,16 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.itcast.oa.base.DaoSupportImpl;
 import cn.itcast.oa.dao.RoleDao;
 import cn.itcast.oa.domain.Role;
 import cn.itcast.oa.service.RoleService;
 
 @Service
 @Transactional
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl extends DaoSupportImpl<Role> implements RoleService{
 
-	@Resource
+/*	@Resource
 	private RoleDao roleDao;
 	
 	public List<Role> queryAll() {
@@ -39,6 +40,6 @@ public class RoleServiceImpl implements RoleService{
 
 	public void edit(Role role) {
 		roleDao.update(role);
-	}
+	}*/
 
 }

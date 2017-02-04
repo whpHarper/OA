@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cn.itcast.oa.base.DaoSupportImpl;
 import cn.itcast.oa.dao.DepartmentDao;
 import cn.itcast.oa.domain.Department;
 import cn.itcast.oa.service.DepartmentService;
@@ -15,15 +16,15 @@ import cn.itcast.oa.service.DepartmentService;
 @Service
 @Transactional
 @SuppressWarnings("unchecked")
-public class DepartmentServiceImpl implements DepartmentService {
+public class DepartmentServiceImpl extends DaoSupportImpl<Department> implements DepartmentService{
 
-	@Resource
+	/*@Resource
 	private DepartmentDao departmentDao;
-	
+	*/
 	@Resource
 	private SessionFactory sessionFactory;
 	
-	public List<Department> findAll() {
+	/*public List<Department> findAll() {
 		return departmentDao.findAll();
 	}
 
@@ -41,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	public void update(Department department) {
 		departmentDao.update(department);
-	}
+	}*/
 
 	
 	public List<Department> findTopList() {

@@ -1,22 +1,25 @@
 package cn.itcast.oa.base;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("unchecked")
-public abstract class BaseDaoImpl<T> implements BaseDao<T>{
+@Transactional
+public abstract class DaoSupportImpl<T> implements DaoSupport<T>{
 
 	@Resource
 	private SessionFactory sessionFactory;
 	
 	private Class<T> clazz=null;  //TODO:无法获得T的class类型
 	
-	public BaseDaoImpl(){
+	public DaoSupportImpl(){
 		//使用反射技术获得泛型T的类型
 		ParameterizedType pt=(ParameterizedType) this.getClass().getGenericSuperclass();  //获取属性类型
 		this.clazz=(Class<T>)pt.getActualTypeArguments()[0];
@@ -59,11 +62,15 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T>{
 	}
 
 	public List<T> getByIds(Long[] ids) {
-		
-		return getSession().createQuery(
-				"From User where id in(:ids)")
-				.setParameterList("ids", ids)
-				.list();
+		if(ids!=null){
+			return getSession().createQuery(
+					"From "+clazz.getSimpleName()+" where id in(:ids)")
+					.setParameterList("ids", ids)
+					.list();
+		}
+		else{
+			return Collections.EMPTY_LIST;
+		}
 	}
 
 	public List<T> findAll() {

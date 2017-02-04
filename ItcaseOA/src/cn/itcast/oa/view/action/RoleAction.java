@@ -1,5 +1,6 @@
 package cn.itcast.oa.view.action;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,6 +8,8 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import cn.itcast.oa.base.BaseAction;
+import cn.itcast.oa.domain.Privilege;
 import cn.itcast.oa.domain.Role;
 import cn.itcast.oa.service.RoleService;
 
@@ -14,54 +17,29 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
+@SuppressWarnings("serial")
 @Controller
 @Scope("prototype")
-public class RoleAction extends ActionSupport implements ModelDriven<Role>{
+public class RoleAction extends BaseAction<Role>{
+
+	private Long[] privilegeIds;
 	
-	@Resource
-	private RoleService roleService;
-	
-	private Role model=new Role();
-	public Role getModel() {
-		return model;
-	}
-	
-	/*private long id;
-	private String name;
-	private String description;
-	
-	public String getName() {
-		return name;
+	public Long[] getPrivilegeIds() {
+		return privilegeIds;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPrivilegeIds(Long[] privilegeIds) {
+		this.privilegeIds = privilegeIds;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}*/
 
 	public String list(){
-		List<Role> list=roleService.queryAll();
+		List<Role> list=roleService.findAll();
 		ActionContext.getContext().put("roleList", list);
 		return "list";
 	}
 	
 	public String delete(){
-		roleService.deleteById(model.getId());
+		roleService.delete(model.getId());
 		return "toList";
 	}
 	
@@ -70,11 +48,7 @@ public class RoleAction extends ActionSupport implements ModelDriven<Role>{
 	}
 	
 	public String add(){
-		/*Role role=new Role();
-		role.setName(model.getName());
-		role.setDescription(model.getDescription());
-		roleService.add(role);*/
-		roleService.add(model);
+		roleService.save(model);
 		return "toList";
 	}
 	
@@ -89,9 +63,39 @@ public class RoleAction extends ActionSupport implements ModelDriven<Role>{
 		role.setId(model.getId());
 		role.setDescription(model.getDescription());
 		role.setName(model.getName());
-		roleService.edit(role);
+		roleService.update(role);
 		return "toList";
 	}
 
+	public String setPrivilegeUI(){
+		Role role=roleService.getById(model.getId());
+		ActionContext.getContext().getValueStack().push(role);
+		
+		//显示回显数据
+		
+		if(role.getPrivileges()!=null){
+			int index=0;
+			privilegeIds=new Long[role.getPrivileges().size()];
+			for(Privilege privilege:role.getPrivileges()){
+				privilegeIds[index++]=privilege.getId();
+			}
+		}
+		
+		//显示所有角色
+		List<Privilege> privileges=privilegeService.findAll();
+		ActionContext.getContext().put("privilegeList", privileges);
+
+		return "setPrivilegeUI";
+	}
 	
+	public String setPrivilege(){
+		Role role=roleService.getById(model.getId());
+		
+		//获取privilege
+		List<Privilege> privilegeList=privilegeService.getByIds(privilegeIds);
+		role.setPrivileges(new HashSet<Privilege>(privilegeList));
+		
+		roleService.update(role);
+		return "toList";
+	}
 }

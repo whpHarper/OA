@@ -3,11 +3,12 @@ package cn.itcast.oa.service;
 import java.util.List;
 
 
+import cn.itcast.oa.base.DaoSupport;
 import cn.itcast.oa.domain.Role;
 
-public interface RoleService {
+public interface RoleService extends DaoSupport<Role>{
 
-	List<Role> queryAll();
+	/*List<Role> queryAll();
 
 	void deleteById(long id);
 
@@ -15,6 +16,6 @@ public interface RoleService {
 
 	Role getById(long id);
 
-	void edit(Role role);
+	void edit(Role role);*/
 
 }

@@ -9,7 +9,7 @@ import java.util.Set;
  * @author tyg
  * 
  */
-public class Department {
+public class Department implements java.io.Serializable {
 	private Long id;
 	private Set<User> users = new HashSet<User>();
 	private Department parent;
