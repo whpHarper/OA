@@ -2,6 +2,10 @@ package cn.itcast.oa.base;
 
 import java.util.List;
 
+import cn.itcast.oa.domain.PageBean;
+import cn.itcast.oa.domain.Topic;
+import cn.itcast.oa.util.QueryHelper;
+
 public interface DaoSupport<T> {
 	
 	/**
@@ -41,4 +45,9 @@ public interface DaoSupport<T> {
 	 * @return
 	 */
 	List<T> findAll();
+	
+	@Deprecated
+	PageBean getPageBean(int pageNum,int pageSize,String hql,List<Object> parameters);
+
+	PageBean getPageBean(int pageNum,int pageSize,QueryHelper queryHelper);
 }

@@ -55,6 +55,12 @@
 			<result name="toList" type="redirectAction">department_list?parentId=${parentId}</result>
 		</action>
 		
+		<action name="forumManage_*" class="forumManageAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/forumManageAction/list.jsp</result>
+			<result name="saveUI">/WEB-INF/jsp/forumManageAction/saveUI.jsp</result>
+			<result name="toList" type="redirectAction">forumManage_list</result>
+		</action>
+		
 		<action name="user_*" class="userAction" method="{1}">
 			<result name="list">/WEB-INF/jsp/userAction/list.jsp</result>
 			<result name="saveUI">/WEB-INF/jsp/userAction/saveUI.jsp</result>
@@ -63,6 +69,24 @@
 			<result name="loginout">/WEB-INF/jsp/userAction/logout.jsp</result>
 			<result name="toLogin" type="redirect">/index.jsp</result>
 		</action>
+		
+		<action name="forum_*" class="forumAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/forumAction/list.jsp</result>
+			<result name="show">/WEB-INF/jsp/forumAction/show.jsp</result>
+		</action>
+		
+		<action name="topic_*" class="topicAction" method="{1}">
+			<result name="show">/WEB-INF/jsp/topicAction/show.jsp</result>
+			<result name="addUI">/WEB-INF/jsp/topicAction/addUI.jsp</result>
+			<result name="toShow" type="redirectAction">topic_show?id=${id}</result>
+		</action>
+		
+		<action name="reply_*" class="replyAction" method="{1}">
+			<result name="toTopicShow" type="redirectAction">topic_show?id=${topicId}</result>
+			<result name="addUI">/WEB-INF/jsp/replyAction/addUI.jsp</result>
+		</action>
+		
+		
 		
 		<action name="home_*" class="homeAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/homeAction/{1}.jsp</result>

@@ -6,9 +6,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import cn.itcast.oa.domain.PageBean;
+import cn.itcast.oa.util.QueryHelper;
 
 @SuppressWarnings("unchecked")
 @Transactional
@@ -78,5 +82,62 @@ public abstract class DaoSupportImpl<T> implements DaoSupport<T>{
 				"from "+clazz.getSimpleName())
 				.list();
 	}
+	
+	@Deprecated
+	public PageBean getPageBean(int pageNum,int pageSize,String hql,List<Object> parameters){
+		//使用query对象查询数据
+		// 查询本页的数据列表
+		Query listQuery = getSession().createQuery(hql); // 创建查询对象
+		if (parameters != null) { // 设置参数
+			for (int i = 0; i < parameters.size(); i++) {
+				listQuery.setParameter(i, parameters.get(i));
+			}
+		}
+		listQuery.setFirstResult((pageNum - 1) * pageSize);
+		listQuery.setMaxResults(pageSize);
+		List list = listQuery.list(); // 执行查询
+
+		// 查询总记录数量
+		Query countQuery = getSession().createQuery("SELECT COUNT(*) " + hql);
+		if (parameters != null) { // 设置参数
+			for (int i = 0; i < parameters.size(); i++) {
+				countQuery.setParameter(i, parameters.get(i));
+			}
+		}
+		Long count = (Long) countQuery.uniqueResult(); // 执行查询
+
+		return new PageBean(pageNum, pageSize, count.intValue(), list);
+	
+	}
+	
+	/**
+	 * 通过queryHelper创建查询对象
+	 */
+	public PageBean getPageBean(int pageNum,int pageSize,QueryHelper queryHelper){
+
+		List<Object>parameters=queryHelper.getParameters();
+		Query listQuery = getSession().createQuery(queryHelper.getListQueryHql()); // 创建查询对象
+		if (parameters != null) { // 设置参数
+			for (int i = 0; i < parameters.size(); i++) {
+				listQuery.setParameter(i, parameters.get(i));
+			}
+		}
+		listQuery.setFirstResult((pageNum - 1) * pageSize);
+		listQuery.setMaxResults(pageSize);
+		List list = listQuery.list(); // 执行查询
+
+		// 查询总记录数量
+		Query countQuery = getSession().createQuery(queryHelper.getCountQueryHql());
+		if (parameters != null) { // 设置参数
+			for (int i = 0; i < parameters.size(); i++) {
+				countQuery.setParameter(i, parameters.get(i));
+			}
+		}
+		Long count = (Long) countQuery.uniqueResult(); // 执行查询
+
+		return new PageBean(pageNum, pageSize, count.intValue(), list);
+	
+	}
+
 
 }

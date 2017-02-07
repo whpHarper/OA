@@ -21,6 +21,7 @@ import com.opensymphony.xwork2.ModelDriven;
 @Scope("prototype")
 public class DepartmentAction extends BaseAction<Department>{
 
+	
 	private Long parentId;
 	public Long getParentId() {
 		return parentId;
